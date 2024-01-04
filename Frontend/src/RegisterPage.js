@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import "./Form.css";
-import LogForm from "./LogForm";
+import LogForm from "./LoginPage";
 
 const validate = (values) => {
   const errors = {};
-  if (!values.userName) {
-    errors.userName = "Required";
-  } else if (values.userName.length > 15) {
-    errors.userName = "Must be 15 characters or less";
+  if (!values.name) {
+    errors.name = "Required";
+  } else if (values.name.length > 15) {
+    errors.name = "Must be 15 characters or less";
   }
 
   if (!values.email) {
@@ -30,14 +30,38 @@ const Form = () => {
   const [form, setForm] = useState(false);
   const formik = useFormik({
     initialValues: {
-      userName: "",
+      name: "",
 
       email: "",
       password: "",
     },
     validate,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit:async (values) => {
+      console.log("hi");
+      try {
+        // Make a POST request to your register endpoint using fetch
+        const response = await fetch("http://localhost:3002/api/users/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        });
+
+        // Parse the JSON response
+        const data = await response.json();
+
+        // Check if the request was successful
+        if (response.ok) {
+          console.log("Registration successful", data);
+          alert("register success")
+        } else {
+          console.error("Registration failed", data);
+        }
+      } catch (error) {
+        // Handle any other errors
+        console.error("Error during registration", error);
+      }
     },
   });
   return (
@@ -63,15 +87,15 @@ const Form = () => {
 
                 <input
                   className="form-control"
-                  id="userName"
-                  name="userName"
+                  id="name"
+                  name="name"
                   type="useName"
                   placeholder="Enter UserName"
                   onChange={formik.handleChange}
-                  value={formik.values.userName}
+                  value={formik.values.name}
                 />
-                {formik.errors.userName ? (
-                  <div className="invalid-feedback d-block">{formik.errors.userName}</div>
+                {formik.errors.name ? (
+                  <div className="invalid-feedback d-block">{formik.errors.name}</div>
                 ) : null}
               </div>
 

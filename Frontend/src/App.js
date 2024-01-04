@@ -1,4 +1,4 @@
-import SignForm from "./SignForm";
+import SignForm from "./RegisterPage";
 
 function App() {
   return (

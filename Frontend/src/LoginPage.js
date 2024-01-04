@@ -1,22 +1,10 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import "./Form.css";
-import SignForm from "./SignForm";
+import SignForm from "./RegisterPage";
 
 const validate = (values) => {
   const errors = {};
-  if (!values.userName) {
-    errors.userName = "Required";
-  } else if (values.userName.length > 15) {
-    errors.userName = "Must be 15 characters or less";
-  }
-
-  if (!values.city) {
-    errors.city = "Required";
-  } else if (values.city.length > 20) {
-    errors.city = "Must be 20 characters or less";
-  }
-
   if (!values.email) {
     errors.email = "Required";
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -40,8 +28,30 @@ const LogForm = () => {
       password: "",
     },
     validate,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      try {
+        // Make a POST request to your login endpoint using fetch
+        const response = await fetch("http://localhost:3002/api/users/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        });
+
+        // Parse the JSON response
+        const data = await response.json();
+
+        // Check if the request was successful
+        if (response.ok) {
+          console.log("Login successful", data);
+        } else {
+          console.error("Login failed", data);
+        }
+      } catch (error) {
+        // Handle any other errors
+        console.error("Error during login", error);
+      }
     },
   });
   return (
