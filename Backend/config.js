@@ -10,7 +10,8 @@ module.exports = {
       user: process.env.DB_USER || 'root',
       password: process.env.DB_PASSWORD || 'Tha@021103',
       database: process.env.DB_DATABASE || 'docker',
+      port: process.env.DB_PORT
     },
-    PORT: 3002
+    PORT:  process.env.DB_PORT_NODE
   };
   

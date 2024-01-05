@@ -10,7 +10,7 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - ./database/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/0_init.sql
       - $HOME/database:/var/lib/mysql
     networks:
       - connect

@@ -14,7 +14,7 @@ const connection = mysql.createConnection({
   user: config.db.user,
   password:config.db.password,
   database: config.db.database,
-  port: 3306
+  port:  config.db.port
 });
 
 app.use(cors());
