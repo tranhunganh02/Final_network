@@ -1,0 +1,50 @@
+services:
+  mysqldb:
+    image: hunganhvn/linux_final:mysqldb_v1
+    restart: unless-stopped
+    container_name: mysql
+    build: .
+    environment:
+      - MYSQL_DATABASE=docker
+      - MYSQL_ROOT_PASSWORD=Tha@021103
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - $HOME/database:/var/lib/mysql
+    networks:
+      - connect
+  backend:
+    container_name: nodejs
+    build: .././Backend
+    restart: unless-stopped
+    volumes:
+      - $HOME/app/backend
+    image: hunganhvn/linux_final:nodeapp_v1
+    ports:
+      - 3002:3002
+    environment:
+      DB_HOST: mysqldb
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: Tha@021103
+      DB_DATABASE: docker
+    depends_on:
+      - mysqldb
+    networks:
+      - connect
+  frontend:
+    container_name: reactapp
+    build: .././Frontend
+    volumes:
+      - $HOME/app/frontend
+    image: hunganhvn/linux_final:reactapp_v1
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    networks:
+      - connect    
+networks:
+  connect: 
+    driver:  bridge
